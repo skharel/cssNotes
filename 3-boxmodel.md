@@ -74,3 +74,50 @@ https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Normal_Flow
 ## min-width and max-width
 
 > same as min/max-height
+
+# Collapsed margins:
+
+When top ad/or bottom margins (note only top and bottom but not left or right) margins are adjoining, they overlap. These overlapped margins merges aka collapses to form a single margin. This is what `collapsing` margin means. When collapsing happens, if both margins had equal value, say x, then the resulting margin is equal to x. However, if the margins were x, y and y > x, the resulting margin will be equal to y (bigger margin size will be used)
+
+If margins do not collapse as you want, you can fix using:
+
+1. padding: if you add top and bottom padding, margins won't collpase
+2. use flexboxes; margins of flexbox items won't collapse
+
+# Spacing elements within a container
+
+Suppose you have contaner and inside of it are 2 block items and both have class say item as:
+
+```css
+.item {
+  padding: 1em;
+}
+```
+
+With this you will have items nicely inside a container with little bit of space around items and the container. Now if you also want to add some space between these 2 items, you could add margin-top to this class. However, when it gets rendered you will notice that because of the padding, the top element has little extra space on top becayse the total gap is margin + padding.
+
+Instead of adding margin to the item class, you could add margin only in the second element as:
+
+```css
+.item + .item {
+  margin-top: 1em;
+}
+```
+
+This will fix the problem until you have need to add 3rd element. There you can do the same trick by adding margin-top to the third element again. Everytime, you add new item to this container you will have to do this.
+
+### Meet Lobotomized owl selector: \* + \*
+
+"Margins are like applying glue to one side of an object before you've determined whether you actually want to stick it to something or what that something might be" - Heydon Pickering.
+
+Lobotomized owl selector is a general solution that works no matter how your page will be strucutured. It selects all elements on the page that aren't the first child of their parent. In html body is the second child of html element, therefore you should also include body as a part of your owl selector as:
+
+```css
+body * + * {
+  margin-top: 1em <== value you want;
+}
+```
+
+> Note: It is good idea to add this to the top of your page but for existing project, you might have to added few fixes for this to workout
+
+The only time this owl selector will be an issue is, if you are doing multiple column layout. In such cases for second child, you will explictly need to add margin-top: 0 to remove extra margin at top. While this seems technically like the issue we described earlier, by making use of owl selector you will write a fix like these only in very few places. However, if your website has more coulmns based layout this may not be a proper fit. Use judiciously
